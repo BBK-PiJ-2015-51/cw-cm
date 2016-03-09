@@ -72,7 +72,18 @@ public class TestContact {
     public void testAddNotesWhenEmpty() {
         String input = "late again";
         Contact newC = new ContactImpl(10,"Carl");
-        newC.addNotes("late");
+        newC.addNotes("late again");
+        String output = newC.getNotes();
+        assertEquals(input,output);
+
+    }
+
+    @Test
+    public void testAddAdditionalNotes() {
+        String firstInput = "late again";
+        Contact newC = new ContactImpl(10,"Carl",firstInput);
+        newC.addNotes("travel problems");
+        String input = "late againtravel problems";
         String output = newC.getNotes();
         assertEquals(input,output);
 

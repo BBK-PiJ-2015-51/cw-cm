@@ -47,6 +47,6 @@ public class ContactImpl implements Contact {
     }
 
     public void addNotes(String note) {
-        this.contactNotes = contactNotes + note;
+        this.contactNotes = contactNotes  + note;
     }
 }
