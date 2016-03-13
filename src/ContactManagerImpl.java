@@ -1,15 +1,16 @@
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Created by stevenjenkins on 13/03/2016.
  */
 
-
-
 public class ContactManagerImpl implements ContactManager {
 
+    private Set<Contact> allContacts;
+    private int contactId = 1;
     public ContactManagerImpl() {
 
     }
@@ -52,11 +53,35 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public int addNewContact(String name, String notes) {
-        return 0;
+        if (allContacts == null) {
+            allContacts = new HashSet<Contact>();
+        }
+
+        if (name.equals("")) {
+            throw new IllegalArgumentException("Name should not be empty");
+        }
+
+        if (notes.equals("")) {
+            throw new IllegalArgumentException("Notes should not be empty");
+        }
+
+        if (name == null) {
+            throw new NullPointerException("Name should not be null");
+        }
+
+        if (notes == null) {
+            throw new NullPointerException("Notes should not be null");
+        }
+        Contact newC = new ContactImpl(contactId,name,notes);
+        allContacts.add(newC);
+        contactId++;
+        return newC.getId();
     }
 
     public Set<Contact> getContacts(String name) {
-        return null;
+       if (name == null) {
+           throw new NullPointerException("Name should not be null");
+       } return null;
     }
 
     public Set<Contact> getContacts(int... ids) {
