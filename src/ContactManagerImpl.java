@@ -17,17 +17,36 @@ public class ContactManagerImpl implements ContactManager {
     private int contactId = 1;
     private int meetingId = 1;
     private List<PastMeeting> pastMeetings = null;
+    private List<FutureMeeting> futureMeetings = null;
+    Calendar today = Calendar.getInstance();
 
     public ContactManagerImpl() {
 
     }
 
-    public int addFutureMeeting(Set<Contact> contacts, Calendar date){
-        return 0;
+    public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
+        if (futureMeetings ==null) {
+            futureMeetings = new ArrayList<FutureMeeting>();
+        }
+        if (date==null) {
+            throw new NullPointerException("Date should not be null");
+        }
+        if (contacts == null) {
+            throw new NullPointerException("Contacts should not be null");
+        }
+        if (today.compareTo(date) > 0) {
+            throw new IllegalArgumentException("Meeting is in the past");
+        }
+        FutureMeeting newFM = new FutureMeetingImpl(meetingId, date, contacts);
+        futureMeetings.add(newFM);
+        meetingId++;
+        return newFM.getId();
     }
 
     public PastMeeting getPastMeeting(int id) {
-
+        if (pastMeetings == null) {
+            return null;
+        }
         PastMeeting result = null;
         for(int i = 0; i < pastMeetings.size(); i++) {
             if (pastMeetings.get(i).getId() == id) {
@@ -38,6 +57,12 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public FutureMeeting getFutureMeeting(int id) {
+        if (pastMeetings != null) {
+            if (getPastMeeting(id).getId() == id) {
+                throw new IllegalArgumentException("Should not be date in the past");
+            }
+        }
+
         return null;
     }
 
@@ -87,15 +112,12 @@ public class ContactManagerImpl implements ContactManager {
         if (allContacts == null) {
             allContacts = new HashSet<Contact>();
         }
-
         if (name.equals("")) {
             throw new IllegalArgumentException("Name should not be empty");
         }
-
         if (notes.equals("")) {
             throw new IllegalArgumentException("Notes should not be empty");
         }
-
         if (name == null) {
             throw new NullPointerException("Name should not be null");
         }

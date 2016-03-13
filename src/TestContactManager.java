@@ -228,10 +228,95 @@ public class TestContactManager {
         assertEquals(input, output);
     }
 
-    @Test
+   /* @Test
     public void testGetPastMeetingIdIsFutureMeeting() {
        int input = 1;
         int output = 2;
+        assertEquals(input, output);
+    }*/
+
+
+    //test add future meeting
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingPastMeeting() {
+        Set<Contact> newC = new HashSet<Contact>();
+        newC.add(new ContactImpl(2,"Adam Jones","Early"));
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2014, 3, 10);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        newCM.addFutureMeeting(newC,calPast);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddFutureMeetingContactNull() {
+        Set<Contact> newC = null;
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2014, 3, 10);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        newCM.addFutureMeeting(newC,calFuture);
+    }
+    @Test(expected = NullPointerException.class)
+    public void testAddFutureMeetingDateNull() {
+        Set<Contact> newC = new HashSet<Contact>();
+        newC.add(new ContactImpl(2,"Adam Jones","Early"));
+        Calendar calFuture = null;
+        newCM.addFutureMeeting(newC,calFuture);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingContactNotExist() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,9),calFuture);
+    }
+
+    //test get future meeting
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetFutureMeetingPastMeeting() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2015, 3, 20);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        newCM.addNewPastMeeting(newCM.getContacts(1,2,3),calPast,"good meeting" );
+        //add new futuremeeting
+        newCM.addFutureMeeting(newCM.getContacts(1,2), calFuture);
+        newCM.getFutureMeeting(1);
+
+    }
+
+    @Test
+    public void testGetFutureMeetingId() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2015, 3, 20);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        //add new futuremeeting
+        newCM.addFutureMeeting(newCM.getContacts(1,2), calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(2,3), calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(2,3), calFuture);
+        int input = 1;
+        int output = newCM.getFutureMeeting(input).getId();
         assertEquals(input, output);
     }
 
