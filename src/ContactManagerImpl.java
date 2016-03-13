@@ -5,6 +5,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.ArrayList;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.NotSerializableException;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 
 
 /**
@@ -19,6 +27,7 @@ public class ContactManagerImpl implements ContactManager {
     private List<PastMeeting> pastMeetings = null;
     private List<FutureMeeting> futureMeetings = null;
     Calendar today = Calendar.getInstance();
+    private String filename = "ContactManager.ser";
 
     public ContactManagerImpl() {
 
@@ -257,8 +266,55 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public void flush() {
+        flushObjects();
+        flushContactId();
+        flushMeetingId();
+    }
+
+    public void flushObjects() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(filename);
+            // FileOutputStream buffer = new BufferedOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(futureMeetings);
+            out.writeObject(pastMeetings);
+            out.writeObject(allContacts);
+            out.close();
+            fileOut.close();
+            System.out.printf("Serialized data is saved in " + filename);
+        }  catch (NotSerializableException e) {
+            e.printStackTrace();
+        } catch(IOException i) {
+            i.printStackTrace();
+        }
+    }
+
+    public void flushContactId() {
+        File file = new File("contactId.csv");
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(file);
+            out.write(contactId);
+        } catch (FileNotFoundException ex) {
+         System.out.println("Cannot write to file " + file + ".");
+        } finally {
+            out.close();
+        }
 
     }
 
+    public void flushMeetingId() {
+        File file = new File("meetingId.csv");
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(file);
+            out.write(meetingId);
+        } catch (FileNotFoundException ex) {
+            System.out.println("Cannot write to file " + file + ".");
+        } finally {
+            out.close();
+        }
+
+    }
 
 }
