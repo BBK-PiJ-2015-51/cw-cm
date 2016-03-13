@@ -25,11 +25,32 @@ public class TestMeetingImpl {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testConstructorIdBelowZero() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, 3, 20);
+        newContacts.add(new ContactImpl(-6,"Adam", "late"));
+        Meeting newM = new ConcreteMeetingImpl(2,cal,newContacts);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testConstructorContactsEmpty() {
         Calendar cal = Calendar.getInstance();
         cal.set(2016, 3, 20);
         Meeting newM = new ConcreteMeetingImpl(0,cal,newContacts);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testConstructorNullDate() {
+        Calendar cal = null;
+        newContacts.add(new ContactImpl(3,"Adam", "late"));
+        Meeting newM = new ConcreteMeetingImpl(3,cal,newContacts);
+    }
 
+    @Test(expected = NullPointerException.class)
+    public void testConstructorNullContacts() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, 3, 20);
+        newContacts = null;
+        Meeting newM = new ConcreteMeetingImpl(3,cal,newContacts);
+    }
 }

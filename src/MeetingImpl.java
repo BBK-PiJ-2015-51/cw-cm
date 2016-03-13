@@ -3,7 +3,8 @@
  */
 import java.util.Calendar;
 import java.util.Set;
-
+import java.lang.IllegalArgumentException;
+import java.util.HashSet;
 
 public abstract class MeetingImpl implements Meeting{
 
@@ -11,6 +12,32 @@ public abstract class MeetingImpl implements Meeting{
         private Calendar meetingDate;
         private Set<Contact> meetingContacts;
 
+    public MeetingImpl(int Id, Calendar Date, Set<Contact> contacts) {
+
+        if (Id == 0) {
+            throw new IllegalArgumentException("Id should not be 0");
+        }
+
+        if (Id < 0) {
+            throw new IllegalArgumentException("Id should be greater than 0");
+        }
+
+        if (contacts.isEmpty()) {
+            throw new IllegalArgumentException("Contacts in empty");
+        }
+
+        if (Date == null) {
+            throw new NullPointerException("Date must not be null");
+        }
+
+        if (contacts == null) {
+            throw new NullPointerException("Date must not be null");
+        }
+
+        meetingId = Id;
+        meetingDate = Date;
+        meetingContacts = contacts;
+    }
 
         public int getId() {
             return this.meetingId;
