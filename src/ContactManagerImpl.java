@@ -81,7 +81,15 @@ public class ContactManagerImpl implements ContactManager {
     public Set<Contact> getContacts(String name) {
        if (name == null) {
            throw new NullPointerException("Name should not be null");
-       } return null;
+       }
+        Set<Contact> result = new HashSet<Contact>();
+        for(Contact c :allContacts) {
+            Contact tempContact = c;
+                if (c.getName().contains(name)) {
+                    result.add(tempContact);
+                }
+            }
+        return result;
     }
 
     public Set<Contact> getContacts(int... ids) {

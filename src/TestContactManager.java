@@ -1,4 +1,6 @@
 import org.junit.Test;
+import java.util.HashSet;
+import java.util.Set;
 
 import java.util.Calendar;
 
@@ -66,5 +68,40 @@ public class TestContactManager {
         newCM.getContacts(name);
     }
 
-    
+    @Test
+    public void testGetContactsContainsName() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Set<Contact> newC = new HashSet<Contact>();
+        newC.add(new ContactImpl(1,"Bob Smith","Early"));
+        newC.add(new ContactImpl(2,"Bob Tayor","Early"));
+        int input = newC.size();
+        Set<Contact> result = newCM.getContacts("Bob");
+        for(Contact c: result) {
+            System.out.println(c.getName());
+        }
+        int output = result.size();
+        assertEquals(input, output);
+    }
+
+    @Test
+    public void testGetContactsAllContacts() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        int input = 5;
+        Set<Contact> result =  newCM.getContacts("");
+        for(Contact c: result) {
+            System.out.println(c.getName());
+        }
+        int output = result.size();
+        assertEquals(input, output);
+    }
+
+    //test getContacts multiple names
 }
