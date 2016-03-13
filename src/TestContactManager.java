@@ -96,6 +96,7 @@ public class TestContactManager {
         newCM.addNewContact("Edward Carter","Early");
         int input = 5;
         Set<Contact> result =  newCM.getContacts("");
+        System.out.println("testing single");
         for(Contact c: result) {
             System.out.println(c.getName());
         }
@@ -103,5 +104,44 @@ public class TestContactManager {
         assertEquals(input, output);
     }
 
-    //test getContacts multiple names
+    //test getContacts multiple ids
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetContactsByIDNull() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        newCM.getContacts();
+    }
+
+    @Test
+    public void testGetContactsByIDMultipleIds() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        int input = 3;
+        Set<Contact> result =  newCM.getContacts(2, 3, 5);
+        System.out.println("testing multiple");
+        for(Contact c: result) {
+
+            System.out.println(c.getName());
+        }
+        int output = result.size();
+        assertEquals(input, output);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetContactsByIDNoId() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        newCM.getContacts(8);
+    }
+
 }

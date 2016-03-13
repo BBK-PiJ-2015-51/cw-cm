@@ -93,7 +93,20 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public Set<Contact> getContacts(int... ids) {
-        return null;
+        if (ids.length == 0) {
+            throw new IllegalArgumentException("Ids should not be null");
+        }
+        
+        Set<Contact> result = new HashSet<Contact>();
+        boolean idExists = true;
+        for(int i = 0; i < ids.length; i++) {
+            for (Contact c : allContacts) {
+                if (c.getId() == ids[i]) {
+                    result.add(c);
+                }
+            }
+        }
+        return result;
     }
 
     public void flush() {
