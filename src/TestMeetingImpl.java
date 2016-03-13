@@ -13,15 +13,6 @@ import java.util.Collections;
 public class TestMeetingImpl {
 
     Set<Contact> newContacts = new HashSet<Contact>();
-    Contact n = new ContactImpl(1,"Adam", "late");
-    String s = n.getName();
-    System.out.println("hello");
-
-    //newContacts2.add(new ContactImpl(1,"Adam", "late"));
-    //newContacts.add(new ContactImpl(2,"Brian", "early");
-    //newContacts.add(new ContactImpl(3,"Carl", "on time"));
-    //newContacts.add(new ContactImpl(4,"Dave", "didn't turn up"));
-
 
     //test for constructor
 
@@ -29,7 +20,8 @@ public class TestMeetingImpl {
     public void testConstructorIdZero() {
         Calendar cal = Calendar.getInstance();
         cal.set(2016, 3, 20);
-        Meeting newM = new ConcreteMeetingImpl(0,cal,newContacts);
+        newContacts.add(new ContactImpl(0,"Adam", "late"));
+        Meeting newM = new ConcreteMeetingImpl(2,cal,newContacts);
     }
 
     @Test(expected = IllegalArgumentException.class)
