@@ -44,10 +44,12 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public PastMeeting getPastMeeting(int id) {
-        if (pastMeetings == null) {
-            return null;
-        }
+
         PastMeeting result = null;
+        if (pastMeetings == null) {
+            return result;
+        }
+
         for(int i = 0; i < pastMeetings.size(); i++) {
             if (pastMeetings.get(i).getId() == id) {
                 result = pastMeetings.get(i);
@@ -57,7 +59,7 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public FutureMeeting getFutureMeeting(int id) {
-        if (pastMeetings != null) {
+        if (pastMeetings != null && getPastMeeting(id)!= null) {
             if (getPastMeeting(id).getId() == id) {
                 throw new IllegalArgumentException("Should not be date in the past");
             }
@@ -73,14 +75,18 @@ public class ContactManagerImpl implements ContactManager {
 
     public Meeting getMeeting(int id) {
         Meeting result = null;
-        for (int i = 0; i < pastMeetings.size(); i++) {
-            if (pastMeetings.get(i).getId() == id) {
-                result = pastMeetings.get(i);
+        if (pastMeetings != null) {
+            for (int i = 0; i < pastMeetings.size(); i++) {
+                if (pastMeetings.get(i).getId() == id) {
+                    result = pastMeetings.get(i);
+                }
             }
         }
-        for (int i = 0; i < futureMeetings.size(); i++) {
-            if (futureMeetings.get(i).getId() == id) {
-                result = futureMeetings.get(i);
+        if (futureMeetings != null) {
+            for (int i = 0; i < futureMeetings.size(); i++) {
+                if (futureMeetings.get(i).getId() == id) {
+                    result = futureMeetings.get(i);
+                }
             }
         }
         return result;
@@ -160,7 +166,36 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public PastMeeting addMeetingNotes(int id, String text) {
-        return null;
+        //check if meeting exists
+        Meeting meeting = getMeeting(id);
+        if(meeting==null) {
+            throw new IllegalArgumentException("Meeting does not exist");
+        }
+        //if its an existing past meeting just add notes
+        PastMeeting pastMeeting = getPastMeeting(id);
+        if(pastMeeting != null) {
+            PastMeetingImpl pM = ((PastMeetingImpl) pastMeeting);
+            pM.setNotes(text);
+            //if this is a future meeting
+        } else {
+            FutureMeeting fM = getFutureMeeting(id);
+            //datesetforfuture
+            if(today.compareTo(fM.getDate()) < 0) {
+                throw new IllegalStateException("Date is in the future");
+            } else {
+                //Add future meeting to Past Meetings
+                PastMeeting newPM = new PastMeetingImpl(id, fM.getDate(),fM.getContacts(), text);
+                pastMeetings.add(newPM);
+                pastMeeting = newPM;
+                //remove item from ArrayList
+                for(int i = 0; i < futureMeetings.size(); i++) {
+                    if (futureMeetings.get(i).getId() == id) {
+                        futureMeetings.remove(i);
+                    }
+                }
+            }
+        }
+        return pastMeeting;
     }
 
     public int addNewContact(String name, String notes) {

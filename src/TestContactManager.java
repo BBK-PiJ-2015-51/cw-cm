@@ -577,4 +577,83 @@ public class TestContactManager {
         int output = newCM.getFutureMeetingList(f).size();
         assertEquals(input,output);
     }
+
+    //testing add Meeting Notes
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testAddMeetingNotesMeetingNoExist() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        String notes = "Good Meeting";
+        newCM.addNewPastMeeting(newCM.getContacts(1,3,2),calFuture,notes);
+        newCM.addFutureMeeting(newCM.getContacts(1,3,2),calFuture);
+        newCM.addMeetingNotes(3,notes);
+    }
+
+    @Test
+    public void testAddMeetingNotesAlreadyPastMeeting() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        String notes = "Good Meeting";
+        String notes2 = "Bad meeting";
+        newCM.addNewPastMeeting(newCM.getContacts(1,3,2),calFuture,notes);
+        newCM.addFutureMeeting(newCM.getContacts(1,3,2),calFuture);
+        newCM.addMeetingNotes(1,notes2);
+        String input = notes+ notes2;
+        String output = newCM.getPastMeeting(1).getNotes();
+        assertEquals(input,output);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testAddMeetingNotesFutureMeetingInFuture() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        String notes = "Good Meeting";
+        String notes2 = "Bad meeting";
+        newCM.addNewPastMeeting(newCM.getContacts(1,3,2),calFuture,notes);
+        newCM.addFutureMeeting(newCM.getContacts(1,3,2),calFuture);
+        newCM.addMeetingNotes(2,notes2);
+    }
+
+    @Test
+    public void testAddMeetingNotesFutureMeetingInPastAdd() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2015, 3, 5);
+        Calendar calFuture = Calendar.getInstance();
+        calPast.set(2017, 3, 5);
+        String notes = "Good Meeting";
+        String notes2 = "Bad meeting";
+        newCM.addNewPastMeeting(newCM.getContacts(1,3,2),calPast,notes);
+        newCM.addFutureMeeting(newCM.getContacts(1,3,2),calFuture);
+        //set date to date in past
+        newCM.getMeeting(2).getDate().set(2015, 3, 5);
+        newCM.addMeetingNotes(2,notes2);
+        int input = 2;
+        int output = newCM.getPastMeeting(input).getId();
+        assertEquals(input,output);
+    }
+
 }
