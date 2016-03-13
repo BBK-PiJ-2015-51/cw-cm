@@ -63,7 +63,14 @@ public class ContactManagerImpl implements ContactManager {
             }
         }
 
-        return null;
+        FutureMeeting result = null;
+        for(int i = 0; i < futureMeetings.size(); i++) {
+            if (futureMeetings.get(i).getId() == id) {
+                result = futureMeetings.get(i);
+            }
+        }
+        return result;
+
     }
 
     public Meeting getMeeting(int id) {

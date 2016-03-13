@@ -320,4 +320,25 @@ public class TestContactManager {
         assertEquals(input, output);
     }
 
+    @Test
+    public void testGetFutureMeetingIdNotExists() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2015, 3, 20);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        //add new futuremeeting
+        newCM.addFutureMeeting(newCM.getContacts(1,2), calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(2,3), calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(2,3), calFuture);
+        newCM.getFutureMeeting(5);
+        FutureMeeting input = null;
+        FutureMeeting output = newCM.getFutureMeeting(10);
+        assertEquals(input,output);
+    }
 }
