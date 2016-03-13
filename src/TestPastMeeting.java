@@ -12,7 +12,7 @@ import java.util.Collections;
 
 public class TestPastMeeting {
 
-    //test comnstructor
+    //test constructor
 
     @Test(expected = NullPointerException.class)
     public void testConstructorNotesNull() {

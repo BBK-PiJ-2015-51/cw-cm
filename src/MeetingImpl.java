@@ -43,27 +43,27 @@ public abstract class MeetingImpl implements Meeting{
             return this.meetingId;
         }
 
-        public void setId(int id) {
+        /*public void setId(int id) {
             meetingId = id;
-        }
+        }*/
 
 
         public Calendar getDate() {
             return this.meetingDate;
         }
 
-        public void setDate(Calendar date) {
+        /*public void setDate(Calendar date) {
             meetingDate = date;
-        }
+        }*/
 
 
         public Set<Contact> getContacts() {
             return this.meetingContacts;
         }
 
-        public void setContacts(Set<Contact> contacts) {
+        /*public void setContacts(Set<Contact> contacts) {
             meetingContacts = contacts;
-        }
+        }*/
 
 
 }
