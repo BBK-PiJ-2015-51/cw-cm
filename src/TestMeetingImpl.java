@@ -13,6 +13,10 @@ import java.util.Collections;
 public class TestMeetingImpl {
 
     Set<Contact> newContacts = new HashSet<Contact>();
+    Contact n = new ContactImpl(1,"Adam", "late");
+    String s = n.getName();
+    System.out.println("hello");
+
     //newContacts2.add(new ContactImpl(1,"Adam", "late"));
     //newContacts.add(new ContactImpl(2,"Brian", "early");
     //newContacts.add(new ContactImpl(3,"Carl", "on time"));

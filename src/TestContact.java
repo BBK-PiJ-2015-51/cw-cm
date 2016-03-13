@@ -8,7 +8,7 @@ import java.lang.IllegalArgumentException;
 
 public class TestContact {
 
-    //test for the constructor
+    //test for the constructors
 
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorIdZero() {
@@ -31,6 +31,8 @@ public class TestContact {
         String notes = null;
         Contact newC = new ContactImpl(5,"name", notes);
     }
+
+    //Testing methods
 
     @Test
     public void testGetId() {
