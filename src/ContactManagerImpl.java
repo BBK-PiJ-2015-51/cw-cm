@@ -87,7 +87,19 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public List<Meeting> getFutureMeetingList(Contact contact) {
-        return null;
+        if (contact == null) {
+            throw new NullPointerException("Contact must not be null");
+        }
+        List<Meeting> result = new ArrayList<Meeting>();
+        for (int i = 0; i < futureMeetings.size(); i++) {
+            Set<Contact> tempMeetingContacts = futureMeetings.get(i).getContacts();
+            for(Contact tempContact: tempMeetingContacts) {
+                if (tempContact.getId() == contact.getId()) {
+                    result.add(futureMeetings.get(i));
+                }
+            }
+        }
+        return result;
     }
 
     public List<Meeting> getMeetingListOn(Calendar date) {
@@ -114,10 +126,15 @@ public class ContactManagerImpl implements ContactManager {
         }
         List<PastMeeting> result = new ArrayList<PastMeeting>();
         for (int i = 0; i < pastMeetings.size(); i++) {
-            if (pastMeetings.get(i).getId() == contact.getId()) {
-                result.add(pastMeetings.get(i));
+            Set<Contact> tempMeetingContacts = pastMeetings.get(i).getContacts();
+            for(Contact tempContact: tempMeetingContacts) {
+                if (tempContact.getId() == contact.getId()) {
+                    result.add(pastMeetings.get(i));
+                }
             }
+
         }
+
         return result;
     }
 

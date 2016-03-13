@@ -443,7 +443,7 @@ public class TestContactManager {
 
     //illegal argument contact does not exits
 
-    //check correct meetings occured
+
     @Test
     public void testGetPastMeetingListFor() {
         Contact a = new ContactImpl(1,"Adam Jones","Early");
@@ -464,8 +464,8 @@ public class TestContactManager {
         newCM.addNewPastMeeting(newCM.getContacts(1,2,4),calPast,"good meeting" );
         newCM.addNewPastMeeting(newCM.getContacts(1,2,5),calPast,"good meeting" );
         newCM.addNewPastMeeting(newCM.getContacts(1,2,4),calPast,"good meeting" );
-        int input = 1;
-        int output = newCM.getPastMeetingListFor(c).size();
+        int input = 2;
+        int output = newCM.getPastMeetingListFor(d).size();
         assertEquals(input,output);
     }
 
@@ -518,4 +518,63 @@ public class TestContactManager {
     }
 
     // test get future meeting list
+
+    @Test(expected = NullPointerException.class)
+    public void testGetFutureMeetingListContactNull(){
+        Contact newC = null;
+        newCM.getFutureMeetingList(newC);
+    }
+
+    //illegal argument contact does not exits
+
+    //check correct meetings occured
+    @Test
+    public void testGetFutureMeetingList() {
+        Contact a = new ContactImpl(1,"Adam Jones","Early");
+        Contact b = new ContactImpl(2,"Bob","Early");
+        Contact c = new ContactImpl(3,"Bob Tayor","Early");
+        Contact d = new ContactImpl(4,"Dave Johnson","Early");
+        Contact e = new ContactImpl(5,"Edward Carter","Early");
+
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        newCM.addFutureMeeting(newCM.getContacts(1,3,2),calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,4),calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,5),calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,4),calFuture);
+        int input = 2;
+        int output = newCM.getFutureMeetingList(d).size();
+        assertEquals(input,output);
+    }
+
+    @Test
+    public void testGetFutureMeetingListEmpty() {
+        Contact a = new ContactImpl(1,"Adam Jones","Early");
+        Contact b = new ContactImpl(2,"Bob","Early");
+        Contact c = new ContactImpl(3,"Bob Tayor","Early");
+        Contact d = new ContactImpl(4,"Dave Johnson","Early");
+        Contact e = new ContactImpl(5,"Edward Carter","Early");
+        Contact f = new ContactImpl(6,"Edward Miller","Early");
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        newCM.addFutureMeeting(newCM.getContacts(1,3,2),calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,4),calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,5),calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,4),calFuture);
+        int input = 0;
+        int output = newCM.getFutureMeetingList(f).size();
+        assertEquals(input,output);
+    }
 }
