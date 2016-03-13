@@ -72,7 +72,18 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public Meeting getMeeting(int id) {
-        return null;
+        Meeting result = null;
+        for (int i = 0; i < pastMeetings.size(); i++) {
+            if (pastMeetings.get(i).getId() == id) {
+                result = pastMeetings.get(i);
+            }
+        }
+        for (int i = 0; i < futureMeetings.size(); i++) {
+            if (futureMeetings.get(i).getId() == id) {
+                result = futureMeetings.get(i);
+            }
+        }
+        return result;
     }
 
     public List<Meeting> getFutureMeetingList(Contact contact) {
@@ -100,9 +111,15 @@ public class ContactManagerImpl implements ContactManager {
     public List<PastMeeting> getPastMeetingListFor(Contact contact) {
         if (contact == null) {
             throw new NullPointerException("Contact must not be null");
-        } return null;
+        }
+        List<PastMeeting> result = new ArrayList<PastMeeting>();
+        for (int i = 0; i < pastMeetings.size(); i++) {
+            if (pastMeetings.get(i).getId() == contact.getId()) {
+                result.add(pastMeetings.get(i));
+            }
+        }
+        return result;
     }
-
 
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) {
         if (pastMeetings == null) {

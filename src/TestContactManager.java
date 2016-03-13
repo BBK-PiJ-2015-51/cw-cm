@@ -446,6 +446,12 @@ public class TestContactManager {
     //check correct meetings occured
     @Test
     public void testGetPastMeetingListFor() {
+        Contact a = new ContactImpl(1,"Adam Jones","Early");
+        Contact b = new ContactImpl(2,"Bob","Early");
+        Contact c = new ContactImpl(3,"Bob Tayor","Early");
+        Contact d = new ContactImpl(4,"Dave Johnson","Early");
+        Contact e = new ContactImpl(5,"Edward Carter","Early");
+
         newCM.addNewContact("Adam Jones","Early");
         newCM.addNewContact("Bob","Early");
         newCM.addNewContact("Bob Tayor","Early");
@@ -458,11 +464,58 @@ public class TestContactManager {
         newCM.addNewPastMeeting(newCM.getContacts(1,2,4),calPast,"good meeting" );
         newCM.addNewPastMeeting(newCM.getContacts(1,2,5),calPast,"good meeting" );
         newCM.addNewPastMeeting(newCM.getContacts(1,2,4),calPast,"good meeting" );
-
-        newCM.getPastMeetingListFor()
-
-
+        int input = 1;
+        int output = newCM.getPastMeetingListFor(c).size();
         assertEquals(input,output);
     }
+
+    // test get meeting
+
+    @Test
+    public void testGetMeeting() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2015, 3, 20);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        newCM.addNewPastMeeting(newCM.getContacts(1,2,3),calPast,"good meeting" );
+        newCM.addNewPastMeeting(newCM.getContacts(1,2,4),calPast,"good meeting" );
+        //add new futuremeeting
+        newCM.addFutureMeeting(newCM.getContacts(1,2), calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,3), calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,5), calFuture);
+        int input =  3;
+        int output = newCM.getMeeting(input).getId();
+        assertEquals(input,output);
     }
+
+    @Test
+    public void testGetMeetingNull() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2015, 3, 20);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2017, 3, 20);
+        //add newpastmeeting
+        newCM.addNewPastMeeting(newCM.getContacts(1,2,3),calPast,"good meeting" );
+        newCM.addNewPastMeeting(newCM.getContacts(1,2,4),calPast,"good meeting" );
+        //add new futuremeeting
+        newCM.addFutureMeeting(newCM.getContacts(1,2), calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,3), calFuture);
+        newCM.addFutureMeeting(newCM.getContacts(1,2,5), calFuture);
+        Meeting input =  null;
+        Meeting output = newCM.getMeeting(9);
+        assertEquals(input,output);
+    }
+
+    // test get future meeting list
 }
