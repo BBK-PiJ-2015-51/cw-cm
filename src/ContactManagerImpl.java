@@ -1,7 +1,11 @@
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.ArrayList;
+
 
 /**
  * Created by stevenjenkins on 13/03/2016.
@@ -9,8 +13,11 @@ import java.util.HashSet;
 
 public class ContactManagerImpl implements ContactManager {
 
-    private Set<Contact> allContacts;
+    private Set<Contact> allContacts = null;
     private int contactId = 1;
+    private int meetingId = 1;
+    private List<PastMeeting> pastMeetings = null;
+
     public ContactManagerImpl() {
 
     }
@@ -20,7 +27,14 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public PastMeeting getPastMeeting(int id) {
-        return null;
+
+        PastMeeting result = null;
+        for(int i = 0; i < pastMeetings.size(); i++) {
+            if (pastMeetings.get(i).getId() == id) {
+                result = pastMeetings.get(i);
+            }
+        }
+        return result;
     }
 
     public FutureMeeting getFutureMeeting(int id) {
@@ -45,7 +59,24 @@ public class ContactManagerImpl implements ContactManager {
 
 
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) {
-
+        if (pastMeetings == null) {
+            pastMeetings = new ArrayList<PastMeeting>();
+        }
+        if (contacts.isEmpty()) {
+            throw new IllegalArgumentException("Contact should not be empty");
+        }
+        if (contacts == null) {
+            throw new NullPointerException("Contacts should not be null");
+        }
+        if (date == null) {
+            throw new NullPointerException("date should not be null");
+        }
+        if (text == null) {
+            throw new NullPointerException("text should not be null");
+        }
+        PastMeeting newPM = new PastMeetingImpl(meetingId, date, contacts, text);
+        pastMeetings.add(newPM);
+        meetingId++;
     }
 
     public PastMeeting addMeetingNotes(int id, String text) {
@@ -96,14 +127,18 @@ public class ContactManagerImpl implements ContactManager {
         if (ids.length == 0) {
             throw new IllegalArgumentException("Ids should not be null");
         }
-        
         Set<Contact> result = new HashSet<Contact>();
-        boolean idExists = true;
+        boolean idExists;
         for(int i = 0; i < ids.length; i++) {
+            idExists = false;
             for (Contact c : allContacts) {
                 if (c.getId() == ids[i]) {
                     result.add(c);
+                    idExists = true;
                 }
+            }
+            if (!idExists) {
+                 throw new IllegalArgumentException("Id does not exist");
             }
         }
         return result;

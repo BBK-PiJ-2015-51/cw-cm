@@ -13,6 +13,12 @@ public class TestContactManager {
 
     ContactManager newCM = new ContactManagerImpl();
 
+    //create empty contact list
+    //create completed contact list
+    //create date
+    //create String null, empty and value
+
+
     //test add new contact
 
     @Test(expected = IllegalArgumentException.class)
@@ -116,23 +122,7 @@ public class TestContactManager {
         newCM.getContacts();
     }
 
-    @Test
-    public void testGetContactsByIDMultipleIds() {
-        newCM.addNewContact("Adam Jones","Early");
-        newCM.addNewContact("Bob","Early");
-        newCM.addNewContact("Bob Tayor","Early");
-        newCM.addNewContact("Dave Johnson","Early");
-        newCM.addNewContact("Edward Carter","Early");
-        int input = 3;
-        Set<Contact> result =  newCM.getContacts(2, 3, 5);
-        System.out.println("testing multiple");
-        for(Contact c: result) {
 
-            System.out.println(c.getName());
-        }
-        int output = result.size();
-        assertEquals(input, output);
-    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetContactsByIDNoId() {
@@ -141,7 +131,108 @@ public class TestContactManager {
         newCM.addNewContact("Bob Tayor","Early");
         newCM.addNewContact("Dave Johnson","Early");
         newCM.addNewContact("Edward Carter","Early");
-        newCM.getContacts(8);
+        newCM.getContacts(4,8);
+    }
+
+    //test add new past meeting
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddNewPastMeetingContactIsEmpty() {
+        Set<Contact> newC = new HashSet<Contact>();
+        //newC.add(new ContactImpl(2,"Adam Jones","Early"));
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, 3, 20);
+        String s = "good";
+        newCM.addNewPastMeeting(newC,cal, s);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddNewPastMeetingContactNotExists() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, 3, 20);
+        String s = "good";
+        newCM.addNewPastMeeting(newCM.getContacts(1,9),cal,s);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddNewPastMeetingContactIsNull() {
+        Set<Contact> newC = null;
+        //newC.add(new ContactImpl(2,"Adam Jones","Early"));
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, 3, 20);
+        String s = "good";
+        newCM.addNewPastMeeting(newC,cal, s);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddNewPastMeetingDateIsNull() {
+        Set<Contact> newC = new HashSet<Contact>();
+        newC.add(new ContactImpl(2,"Adam Jones","Early"));
+        Calendar cal = null;
+        String s = "good";
+        newCM.addNewPastMeeting(newC,cal, s);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddNewPastMeetingNotesIsNull() {
+        Set<Contact> newC = new HashSet<Contact>();
+        newC.add(new ContactImpl(2,"Adam Jones","Early"));
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, 3, 20);
+        String s = null;
+        newCM.addNewPastMeeting(newC,cal, null);
+    }
+
+    // test get past meeting
+
+    @Test
+    public void testGetPastMeeting() {
+        Set<Contact> newC = new HashSet<Contact>();
+        newC.add(new ContactImpl(2, "Adam Jones", "Early"));
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2016, 3, 20);
+        Calendar calPast2 = Calendar.getInstance();
+        calPast2.set(2016, 3, 20);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2016, 3, 20);
+        String notes1 = "first";
+        String notes2 = "second";
+        newCM.addNewPastMeeting(newC, calPast, notes1);
+        newCM.addNewPastMeeting(newC, calPast2, notes2);
+        String input = notes1;
+        String output = newCM.getPastMeeting(1).getNotes();
+        assertEquals(input, output);
+    }
+
+    @Test
+    public void testGetPastMeetingNoMeeting() {
+        Set<Contact> newC = new HashSet<Contact>();
+        newC.add(new ContactImpl(2,"Adam Jones","Early"));
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2016, 3, 20);
+        Calendar calPast2 = Calendar.getInstance();
+        calPast2.set(2016, 3, 20);
+        Calendar calFuture = Calendar.getInstance();
+        calFuture.set(2016, 3, 20);
+        String notes1 = "first";
+        String notes2 = "second";
+        newCM.addNewPastMeeting(newC,calPast, notes1);
+        newCM.addNewPastMeeting(newC,calPast2, notes2);
+        String input = null;
+        PastMeeting output = newCM.getPastMeeting(9);
+        assertEquals(input, output);
+    }
+
+    @Test
+    public void testGetPastMeetingIdIsFutureMeeting() {
+       int input = 1;
+        int output = 2;
+        assertEquals(input, output);
     }
 
 }
