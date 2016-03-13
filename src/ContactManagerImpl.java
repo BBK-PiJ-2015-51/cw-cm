@@ -62,7 +62,6 @@ public class ContactManagerImpl implements ContactManager {
                 throw new IllegalArgumentException("Should not be date in the past");
             }
         }
-
         FutureMeeting result = null;
         for(int i = 0; i < futureMeetings.size(); i++) {
             if (futureMeetings.get(i).getId() == id) {
@@ -70,7 +69,6 @@ public class ContactManagerImpl implements ContactManager {
             }
         }
         return result;
-
     }
 
     public Meeting getMeeting(int id) {
@@ -82,11 +80,27 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public List<Meeting> getMeetingListOn(Calendar date) {
-        return null;
+        List<Meeting> result = new ArrayList<Meeting>();
+        if (date == null) {
+            throw new NullPointerException("Date Should not be null");
+        }
+        for (int i = 0; i < pastMeetings.size(); i++) {
+            if (pastMeetings.get(i).getDate().compareTo(date) == 0) {
+                result.add(pastMeetings.get(i));
+            }
+        }
+        for (int i = 0; i < futureMeetings.size(); i++) {
+            if (futureMeetings.get(i).getDate().compareTo(date) == 0) {
+                result.add(futureMeetings.get(i));
+            }
+        }
+        return result;
     }
 
     public List<PastMeeting> getPastMeetingListFor(Contact contact) {
-        return null;
+        if (contact == null) {
+            throw new NullPointerException("Contact must not be null");
+        } return null;
     }
 
 
