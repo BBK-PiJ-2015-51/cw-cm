@@ -35,8 +35,7 @@ public class ContactManagerImpl implements ContactManager {
     /**
      * Constructor for Contact Manager
      * Initialises fields, and then reads data if file exists
-     */
-    public ContactManagerImpl() {
+     */    public ContactManagerImpl() {
         //initialise all fields
         allContacts = new HashSet<Contact>();
         contactId = 1;
