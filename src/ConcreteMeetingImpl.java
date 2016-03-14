@@ -1,16 +1,19 @@
-/**
- * Created by stevenjenkins on 12/03/2016.
- */
-
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.Calendar;
 import java.util.Set;
-import java.lang.IllegalArgumentException;
-import java.util.HashSet;
 
+/**
+ * A concrete class that instantiates the abstract class MeetingImpl
+ * used for testing purposes only
+ *
+ * @author stevenjenkins  SJENKI05
+ *
+ */
 public class ConcreteMeetingImpl extends MeetingImpl {
 
+    /**
+     *constructor for concrete class
+     */
     public ConcreteMeetingImpl(int Id, Calendar Date, Set<Contact> contacts) {
         super(Id, Date,contacts);
     }

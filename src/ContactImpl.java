@@ -1,12 +1,17 @@
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
-/**
- * Created by stevenjenkins on 09/03/2016.
- */
 
 import java.io.Serializable;
 import java.lang.IllegalArgumentException;
 
+/**
+ * A contact is a person we are making business with or may do in the future.
+ *
+ * Contacts have an ID (unique, a non-zero positive integer),
+ * a name (not necessarily unique), and notes that the user
+ * may want to save about them.
+ *
+ *@author stevenjenkins SJENKI05
+ *
+ */
 public class ContactImpl implements Contact, Serializable {
 
     private int contactId;

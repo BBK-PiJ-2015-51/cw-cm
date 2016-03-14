@@ -1,12 +1,13 @@
-/**
- * Created by stevenjenkins on 13/03/2016.
- */
-
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * A meeting that was held in the past.
+ *
+ * @author stevenjenkins SJENKI05
+ *
+ * It includes your notes about what happened and what was agreed.
+ */
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Serializable {
 
     private String meetingNotes;
@@ -27,6 +28,7 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Seriali
         }
         meetingNotes = notes;
     }
+
     /**
      * Returns the notes from the meeting.
      *

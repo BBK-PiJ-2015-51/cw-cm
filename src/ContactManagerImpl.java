@@ -1,5 +1,3 @@
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -18,11 +16,12 @@ import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-
 /**
- * Created by stevenjenkins on 13/03/2016.
+ * A class to manage your contacts and meetings.
+ *
+ * @author stevenjenkins SJENKI05
+ *
  */
-
 public class ContactManagerImpl implements ContactManager {
 
     private Set<Contact> allContacts;
@@ -38,12 +37,14 @@ public class ContactManagerImpl implements ContactManager {
      * Initialises fields, and then reads data if file exists
      */
     public ContactManagerImpl() {
+        //initialise all fields
         allContacts = new HashSet<Contact>();
         contactId = 1;
         meetingId = 1;
         pastMeetings =  new ArrayList<PastMeeting>();
         futureMeetings = new ArrayList<FutureMeeting>();
         today = Calendar.getInstance();
+        //check if saved file exists and assign values
         File file = new File("SavedData/");
         if (file.exists()) {
             //flushReadMeetingId();
@@ -109,7 +110,7 @@ public class ContactManagerImpl implements ContactManager {
         if (pastMeetings == null) {
             return result;
         }
-
+        //loop through past meetings to match Id
         for(int i = 0; i < pastMeetings.size(); i++) {
             if (pastMeetings.get(i).getId() == id) {
                 result = pastMeetings.get(i);
@@ -125,11 +126,13 @@ public class ContactManagerImpl implements ContactManager {
      * @throws IllegalArgumentException if there is a meeting with that ID happening in the past
      */
     public FutureMeeting getFutureMeeting(int id) {
+        //go through list of past meetings
         if (pastMeetings != null && getPastMeeting(id)!= null) {
             if (getPastMeeting(id).getId() == id) {
                 throw new IllegalArgumentException("Should not be date in the past");
             }
         }
+        //go through list of future meetings
         FutureMeeting result = null;
         for(int i = 0; i < futureMeetings.size(); i++) {
             if (futureMeetings.get(i).getId() == id) {
@@ -146,6 +149,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     public Meeting getMeeting(int id) {
         Meeting result = null;
+        //go through list of past meetings
         if (pastMeetings != null) {
             for (int i = 0; i < pastMeetings.size(); i++) {
                 if (pastMeetings.get(i).getId() == id) {
@@ -153,6 +157,7 @@ public class ContactManagerImpl implements ContactManager {
                 }
             }
         }
+        //go through list of future meetings
         if (futureMeetings != null) {
             for (int i = 0; i < futureMeetings.size(); i++) {
                 if (futureMeetings.get(i).getId() == id) {
@@ -178,8 +183,10 @@ public class ContactManagerImpl implements ContactManager {
             throw new NullPointerException("Contact must not be null");
         }
         List<Meeting> result = new ArrayList<Meeting>();
+        //go through future meetings
         for (int i = 0; i < futureMeetings.size(); i++) {
             Set<Contact> tempMeetingContacts = futureMeetings.get(i).getContacts();
+            //then go through each contact in future meeting
             for(Contact tempContact: tempMeetingContacts) {
                 if (tempContact.getId() == contact.getId()) {
                     result.add(futureMeetings.get(i));
@@ -204,11 +211,13 @@ public class ContactManagerImpl implements ContactManager {
         if (date == null) {
             throw new NullPointerException("Date Should not be null");
         }
+        //go through pastMeetings
         for (int i = 0; i < pastMeetings.size(); i++) {
             if (pastMeetings.get(i).getDate().compareTo(date) == 0) {
                 result.add(pastMeetings.get(i));
             }
         }
+        //then go through future meetings
         for (int i = 0; i < futureMeetings.size(); i++) {
             if (futureMeetings.get(i).getDate().compareTo(date) == 0) {
                 result.add(futureMeetings.get(i));
@@ -233,8 +242,10 @@ public class ContactManagerImpl implements ContactManager {
             throw new NullPointerException("Contact must not be null");
         }
         List<PastMeeting> result = new ArrayList<PastMeeting>();
+        //go through list of past meetings
         for (int i = 0; i < pastMeetings.size(); i++) {
             Set<Contact> tempMeetingContacts = pastMeetings.get(i).getContacts();
+            //go through each contact in past meeting
             for(Contact tempContact: tempMeetingContacts) {
                 if (tempContact.getId() == contact.getId()) {
                     result.add(pastMeetings.get(i));
@@ -300,7 +311,7 @@ public class ContactManagerImpl implements ContactManager {
             //if this is a future meeting
         } else {
             FutureMeeting fM = getFutureMeeting(id);
-            //datesetforfuture
+            //if date set for future
             if(today.compareTo(fM.getDate()) < 0) {
                 throw new IllegalStateException("Date is in the future");
             } else {
@@ -388,8 +399,10 @@ public class ContactManagerImpl implements ContactManager {
         }
         Set<Contact> result = new HashSet<Contact>();
         boolean idExists;
+        //go through parameter ids
         for(int i = 0; i < ids.length; i++) {
             idExists = false;
+            //check against contacts
             for (Contact c : allContacts) {
                 if (c.getId() == ids[i]) {
                     result.add(c);
@@ -410,9 +423,11 @@ public class ContactManagerImpl implements ContactManager {
      **/
     public void flush() {
         File newFile = new File("SavedData");
+        //check if new file exists, create if needed
         if (!newFile.exists()) {
             newFile.mkdir();
         }
+        //write all data to files
         flushContactManager();
         flushContactId();
         flushMeetingId();

@@ -1,11 +1,15 @@
-/**
- * Created by stevenjenkins on 12/03/2016.
- */
+
 import java.util.Calendar;
 import java.util.Set;
 import java.lang.IllegalArgumentException;
 
-
+/**
+ * A class to represent meetings
+ *
+ * @author stevenjenkins SJENKI05
+ *
+ * Meetings have unique IDs, scheduled date and a list of participating contacts
+ */
 public abstract class MeetingImpl implements Meeting{
 
     private int meetingId;
