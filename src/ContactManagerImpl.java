@@ -30,7 +30,7 @@ public class ContactManagerImpl implements ContactManager {
     private List<PastMeeting> pastMeetings;
     private List<FutureMeeting> futureMeetings;
     Calendar today = Calendar.getInstance();
-    private String filename = "SavedData/ContactManager.ser";
+    private String filename = "SavedData/";
 
     /**
      * Constructor for Contact Manager
@@ -45,12 +45,12 @@ public class ContactManagerImpl implements ContactManager {
         futureMeetings = new ArrayList<FutureMeeting>();
         today = Calendar.getInstance();
         //check if saved file exists and assign values
-        File file = new File("SavedData/");
+        File file = new File(filename);
         if (file.exists()) {
             //flushReadMeetingId();
             //flushReadContactId();
             //flushReadContactManager();
-            System.out.println("Loading Data From File!");
+            //System.out.println("Loading Data From File!");
         }
     }
 
@@ -422,7 +422,7 @@ public class ContactManagerImpl implements ContactManager {
      * closed and when/if the user requests it.
      **/
     public void flush() {
-        File newFile = new File("SavedData");
+        File newFile = new File(filename);
         //check if new file exists, create if needed
         if (!newFile.exists()) {
             newFile.mkdir();
@@ -439,7 +439,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     public void flushContactManager() {
         try {
-            FileOutputStream fileOut = new FileOutputStream("SavedData/ContactManager.ser");
+            FileOutputStream fileOut = new FileOutputStream(filename+"ContactManager.ser");
             // FileOutputStream buffer = new BufferedOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(futureMeetings);
@@ -460,7 +460,7 @@ public class ContactManagerImpl implements ContactManager {
      *
      */
     public void flushContactId() {
-        File file = new File("SavedData/contactId.txt");
+        File file = new File(filename+"contactId.txt");
         PrintWriter out = null;
         try {
             out = new PrintWriter(file);
@@ -478,7 +478,7 @@ public class ContactManagerImpl implements ContactManager {
      *
      */
     public void flushMeetingId() {
-        File file = new File("SavedData/meetingId.txt");
+        File file = new File(filename+"meetingId.txt");
         PrintWriter out = null;
         try {
             out = new PrintWriter(file);
@@ -496,7 +496,7 @@ public class ContactManagerImpl implements ContactManager {
      *
      */
     public void flushReadContactId() {
-        File file = new File("SavedData/contactId.txt");
+        File file = new File(filename+"contactId.txt");
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(file));
@@ -518,7 +518,7 @@ public class ContactManagerImpl implements ContactManager {
      *
      */
     public void flushReadMeetingId() {
-        File file = new File("SavedData/meetingId.txt");
+        File file = new File(filename+"meetingId.txt");
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(file));
@@ -540,10 +540,10 @@ public class ContactManagerImpl implements ContactManager {
      *
      */
     public void flushReadContactManager() {
-        File newFile = new File("SavedData/");
+        File newFile = new File(filename+"ContactManager.ser");
         if (newFile.exists()) {
             try {
-                FileInputStream file = new FileInputStream(filename);
+                FileInputStream file = new FileInputStream(filename+"ContactManager.ser");
                 ObjectInputStream input = new ObjectInputStream (file);
                 futureMeetings = (List<FutureMeeting>)input.readObject();
                 pastMeetings = (List<PastMeeting>)input.readObject();
