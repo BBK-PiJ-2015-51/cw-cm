@@ -111,7 +111,8 @@ public interface ContactManager {
      * @param notes notes to be added about the contact.
      * @return the ID for the new contact
      * @throws IllegalArgumentException if the name or the notes are empty strings
-     * @throws NullPointerException if the name or the notes are null */
+     * @throws NullPointerException if the name or the notes are null
+     */
     int addNewContact(String name, String notes);
 
     /**
