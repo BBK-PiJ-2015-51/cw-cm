@@ -25,73 +25,21 @@ import java.io.FileReader;
 
 public class ContactManagerImpl implements ContactManager {
 
-    private Set<Contact> allContacts = null;
-    private int contactId = 1;
-    private int meetingId = 1;
-    private List<PastMeeting> pastMeetings = null;
-    private List<FutureMeeting> futureMeetings = null;
+    private Set<Contact> allContacts;
+    private int contactId;
+    private int meetingId;
+    private List<PastMeeting> pastMeetings;
+    private List<FutureMeeting> futureMeetings;
     Calendar today = Calendar.getInstance();
-    private String filename = "ContactManager.ser";
-    private boolean savedData = false;
+    private String filename = "SavedData/ContactManager.ser";
 
     public ContactManagerImpl() {
-        if (savedData) {
-            try {
-                FileInputStream file = new FileInputStream(filename);
-                //InputStream buffer = new BufferedInputStream(file);
-                ObjectInputStream input = new ObjectInputStream (file);
-                futureMeetings = (List<FutureMeeting>)input.readObject();
-                pastMeetings = (List<PastMeeting>)input.readObject();
-                allContacts = (Set<Contact>)input.readObject();
-                input.close();
-            } catch (ClassNotFoundException c) {
-                c.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            File file = new File("contactId.txt");
-            BufferedReader in = null;
-            try {
-                in = new BufferedReader(new FileReader(file));
-                String line;
-                while ((line = in.readLine()) != null) {
-                    contactId = Integer.parseInt(line);
-                }
-            } catch (FileNotFoundException e) {
-                System.out.println("File " + file + " does not exist.");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } finally {
-                closeReader(in);
-            }
-
-            File file2 = new File("meetingId.txt");
-            BufferedReader in2 = null;
-            try {
-                in2 = new BufferedReader(new FileReader(file2));
-                String line;
-                while ((line = in.readLine()) != null) {
-                    meetingId = Integer.parseInt(line);
-                }
-            } catch (FileNotFoundException e) {
-                System.out.println("File " + file2 + " does not exist.");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } finally {
-                closeReader(in);
-            }
-
-        } else {
             allContacts = null;
             contactId = 1;
             meetingId = 1;
             pastMeetings = null;
             futureMeetings = null;
             today = Calendar.getInstance();
-            filename = "ContactManager.ser";
-            savedData = false;
-        }
     }
 
     private void closeReader(Reader reader) {
@@ -337,15 +285,17 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public void flush() {
-        flushObjects();
+        File newFile = new File("SavedData");
+        newFile.mkdir();
+        flushContactManager();
         flushContactId();
         flushMeetingId();
-        savedData = true;
+
     }
 
-    public void flushObjects() {
+    public void flushContactManager() {
         try {
-            FileOutputStream fileOut = new FileOutputStream(filename);
+            FileOutputStream fileOut = new FileOutputStream("SavedData/ContactManager.ser");
             // FileOutputStream buffer = new BufferedOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(futureMeetings);
@@ -362,7 +312,7 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public void flushContactId() {
-        File file = new File("contactId.txt");
+        File file = new File("SavedData/contactId.txt");
         PrintWriter out = null;
         try {
             out = new PrintWriter(file);
@@ -376,7 +326,7 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public void flushMeetingId() {
-        File file = new File("meetingId.txt");
+        File file = new File("SavedData/meetingId.txt");
         PrintWriter out = null;
         try {
             out = new PrintWriter(file);
