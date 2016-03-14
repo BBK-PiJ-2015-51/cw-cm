@@ -656,4 +656,43 @@ public class TestContactManager {
         assertEquals(input,output);
     }
 
+    //test flush objects
+    @Test
+    public void testFlushWrite() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2015, 3, 5);
+        Calendar calFuture = Calendar.getInstance();
+        calPast.set(2017, 3, 5);
+        String notes = "Good Meeting";
+        String notes2 = "Bad meeting";
+        newCM.addNewPastMeeting(newCM.getContacts(1,3,2),calPast,notes);
+        newCM.addFutureMeeting(newCM.getContacts(1,3,2),calFuture);
+        newCM.flush();
+    }
+
+    @Test
+    public void testFlushRead() {
+        newCM.addNewContact("Adam Jones","Early");
+        newCM.addNewContact("Bob","Early");
+        newCM.addNewContact("Bob Tayor","Early");
+        newCM.addNewContact("Dave Johnson","Early");
+        newCM.addNewContact("Edward Carter","Early");
+        Calendar calPast = Calendar.getInstance();
+        calPast.set(2015, 3, 5);
+        Calendar calFuture = Calendar.getInstance();
+        calPast.set(2017, 3, 5);
+        String notes = "Good Meeting";
+        String notes2 = "Bad meeting";
+        newCM.addNewPastMeeting(newCM.getContacts(1,3,2),calPast,notes);
+        newCM.addFutureMeeting(newCM.getContacts(1,3,2),calFuture);
+        newCM.flush();
+    }
+
+
+
 }

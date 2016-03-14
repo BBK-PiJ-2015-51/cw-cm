@@ -2,11 +2,12 @@
  * Created by stevenjenkins on 13/03/2016.
  */
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
+public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Serializable {
 
     private String meetingNotes;
 

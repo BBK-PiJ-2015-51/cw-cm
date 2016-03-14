@@ -12,7 +12,11 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.Reader;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 
 /**
@@ -28,9 +32,76 @@ public class ContactManagerImpl implements ContactManager {
     private List<FutureMeeting> futureMeetings = null;
     Calendar today = Calendar.getInstance();
     private String filename = "ContactManager.ser";
+    private boolean savedData = false;
 
     public ContactManagerImpl() {
+        if (savedData) {
+            try {
+                FileInputStream file = new FileInputStream(filename);
+                //InputStream buffer = new BufferedInputStream(file);
+                ObjectInputStream input = new ObjectInputStream (file);
+                futureMeetings = (List<FutureMeeting>)input.readObject();
+                pastMeetings = (List<PastMeeting>)input.readObject();
+                allContacts = (Set<Contact>)input.readObject();
+                input.close();
+            } catch (ClassNotFoundException c) {
+                c.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+            File file = new File("contactId.txt");
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    contactId = Integer.parseInt(line);
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("File " + file + " does not exist.");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } finally {
+                closeReader(in);
+            }
+
+            File file2 = new File("meetingId.txt");
+            BufferedReader in2 = null;
+            try {
+                in2 = new BufferedReader(new FileReader(file2));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    meetingId = Integer.parseInt(line);
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("File " + file2 + " does not exist.");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } finally {
+                closeReader(in);
+            }
+
+        } else {
+            allContacts = null;
+            contactId = 1;
+            meetingId = 1;
+            pastMeetings = null;
+            futureMeetings = null;
+            today = Calendar.getInstance();
+            filename = "ContactManager.ser";
+            savedData = false;
+        }
+    }
+
+    private void closeReader(Reader reader) {
+        try {
+            if (reader != null) {
+                reader.close();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
@@ -269,6 +340,7 @@ public class ContactManagerImpl implements ContactManager {
         flushObjects();
         flushContactId();
         flushMeetingId();
+        savedData = true;
     }
 
     public void flushObjects() {
@@ -290,11 +362,11 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public void flushContactId() {
-        File file = new File("contactId.csv");
+        File file = new File("contactId.txt");
         PrintWriter out = null;
         try {
             out = new PrintWriter(file);
-            out.write(contactId);
+            out.write(new Integer(contactId).toString());
         } catch (FileNotFoundException ex) {
          System.out.println("Cannot write to file " + file + ".");
         } finally {
@@ -304,11 +376,11 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     public void flushMeetingId() {
-        File file = new File("meetingId.csv");
+        File file = new File("meetingId.txt");
         PrintWriter out = null;
         try {
             out = new PrintWriter(file);
-            out.write(meetingId);
+            out.write(new Integer(meetingId).toString());
         } catch (FileNotFoundException ex) {
             System.out.println("Cannot write to file " + file + ".");
         } finally {

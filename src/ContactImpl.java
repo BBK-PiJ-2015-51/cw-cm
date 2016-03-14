@@ -4,9 +4,10 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
  * Created by stevenjenkins on 09/03/2016.
  */
 
+import java.io.Serializable;
 import java.lang.IllegalArgumentException;
 
-public class ContactImpl implements Contact {
+public class ContactImpl implements Contact, Serializable {
 
     private int contactId;
     private String contactName;
